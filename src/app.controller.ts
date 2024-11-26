@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, Render } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Render } from '@nestjs/common';
 import { AppService } from './app.service';
 import { get } from 'http';
 import { TravelDataWithoutId, Travels } from './travels';
@@ -38,7 +38,29 @@ export class AppController {
   @Post('travels')
   postNewTravel(@Body() newData: TravelDataWithoutId)
   {
-    return this.travels.add(newData)
+    return this.travels.add(newData) 
+  }
+
+
+  @Patch('travels/:travelid')
+  modifyTravel(@Param('travelid') id:string, @Body() newData: TravelDataWithoutId){
+    let idNum = parseInt(id)
+    try{
+    return this.travels.replace(idNum,newData)
+  }catch(e){
+    return("ID wrong")
+  }
+  }
+
+  @Delete('travels/:travelid')
+  removeOneTravel(@Param('travelid') id:string){  
+    
+    
+    let idNum = parseInt(id)
+    let found = this.travels.remove(idNum);
+    if(!found){ 
+      throw new NotFoundException("ID wrong");
+    }
   }
 
 
