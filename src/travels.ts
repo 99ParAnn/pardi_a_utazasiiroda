@@ -96,6 +96,7 @@ export class Travels {
     }
     const newData: TravelData = {
       ...data,
+      
       id,
     };
     this.#travels[idx] = newData;

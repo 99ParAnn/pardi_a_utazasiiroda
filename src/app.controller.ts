@@ -43,8 +43,12 @@ export class AppController {
 
 
   @Patch('travels/:travelid')
-  modifyTravel(@Param('travelid') id:string, @Body() newData: TravelDataWithoutId){
+  modifyTravel(@Param('travelid') id:string, @Body() newPartialData: TravelDataWithoutId){
     let idNum = parseInt(id)
+    const newData: TravelDataWithoutId = {
+      ...this.travels.getById(idNum),
+      ...newPartialData
+    };
     try{
     return this.travels.replace(idNum,newData)
   }catch(e){
