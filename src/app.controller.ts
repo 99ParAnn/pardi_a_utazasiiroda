@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Render } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Render } from '@nestjs/common';
 import { AppService } from './app.service';
 import { get } from 'http';
 import { TravelDataWithoutId, Travels } from './travels';
@@ -38,6 +38,13 @@ export class AppController {
   @Post('travels')
   postNewTravel(@Body() newData: TravelDataWithoutId)
   {
+    if(newData.description.length < 30){
+      throw new BadRequestException("Description not long enough")
+    }
+    if(newData.discount < 0 || newData.discount > 50){
+      throw new BadRequestException("Invalid discount")
+    }
+    //ezt borzalmasan rondán csináltam, de nincs már se elég kávém, se elég türelmem szebbre összerakni
     return this.travels.add(newData) 
   }
 
